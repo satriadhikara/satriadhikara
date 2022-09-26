@@ -7,7 +7,7 @@ Student on the path to web developer
 I'm an undergraduate student from STEI ITB who is interested in web development.
 
 * 🌍  I'm based in Jatinangor, Indonesia
-* ✉️  You can contact me at [satriadhikara@gmail.com](mailto:satriadhikara@gmail.com)
+* ✉️  You can contact me at [satriadhikara@icloud.com](mailto:satriadhikara@icloud.com)
 * 🧠  I'm currently learning Django
 
 ### Skills
