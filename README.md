@@ -1,14 +1,14 @@
 Hi ![](https://user-images.githubusercontent.com/18350557/176309783-0785949b-9127-417c-8b55-ab5a4333674e.gif)My name is Satriadhikara Panji Yudhistira
 ======================================================================================================================================================
 
-Web Developer
--------------
+Student on the path to web developer
+------------------------------------
 
-I'm a undergraduate student from STEI ITB.
+I'm a undergraduate student from STEI ITB. I interest in web development.
 
 * 🌍  I'm based in Bandung, Indonesia
 * ✉️  You can contact me at [satriadhikara@gmail.com](mailto:satriadhikara@gmail.com)
-* 🧠  I'm learning ReactJS and Django
+* 🧠  I'm currently learning Django
 
 ### Skills
 
