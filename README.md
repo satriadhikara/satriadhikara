@@ -4,7 +4,7 @@ Hi ![](https://user-images.githubusercontent.com/18350557/176309783-0785949b-912
 Student on the path to web developer
 ------------------------------------
 
-I am an undergraduate student from STEI ITB who is interested in web development.
+I'm an undergraduate student from STEI ITB who is interested in web development.
 
 * 🌍  I'm based in Bandung, Indonesia
 * ✉️  You can contact me at [satriadhikara@gmail.com](mailto:satriadhikara@gmail.com)
