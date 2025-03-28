@@ -3,7 +3,7 @@
 ###
 
 # 💫 About Me:
-🌍  I'm based in Bandung, Indonesia<br>🌱 I’m currently learning zig<br>⚡ In my free time I building mini projects
+🌍  I'm based in Bandung, Indonesia<br>🌱 I’m currently learning Go<br>⚡ In my free time I building mini projects
 
 
 ## 🌐 Socials:
