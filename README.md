@@ -5,6 +5,15 @@
 # 💫 About Me:
 🌍  I'm based in Bandung, Indonesia<br>🌱 I’m currently learning Go<br>⚡ In my free time I building mini projects
 
+###
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/satriadhikara/satriadhikara/output/pacman-contribution-graph-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/satriadhikara/satriadhikara/output/pacman-contribution-graph.svg">
+  <img alt="pacman contribution graph" src="https://raw.githubusercontent.com/satriadhikara/satriadhikara/output/pacman-contribution-graph.svg">
+</picture>
+
+###
 
 ## 🌐 Socials:
 [![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/satriadhikara) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://linkedin.com/in/satriadhikara) 
