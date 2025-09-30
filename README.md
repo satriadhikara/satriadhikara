@@ -3,3 +3,6 @@
   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/satriadhikara/satriadhikara/output/pacman-contribution-graph.svg">
   <img alt="pacman contribution graph" src="https://raw.githubusercontent.com/satriadhikara/satriadhikara/output/pacman-contribution-graph.svg">
 </picture>
+
+## Contact Me
+You can reach me at [hello@satriadhikara.com](mailto:hello@satriadhikara.com).
