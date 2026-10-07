@@ -9,7 +9,6 @@ which keeps local previews working.
 """
 
 import json
-import math
 import os
 import random
 import sys
@@ -26,7 +25,7 @@ INFO = [
     ("Role", "Software Engineer"),
     ("Work", "Grab · KartaView"),
     ("Uni", "Informatics @ ITB (STEI)"),
-    ("Host", "West Java, Indonesia"),
+    ("Host", "Jakarta, Indonesia"),
     ("Uptime", "{uptime}"),
     None,
     ("Languages.Code", "TypeScript, Rust, Go, Python, Zig"),
@@ -53,13 +52,13 @@ THEMES = {
     "dark": {
         "bg": "#0b0f14", "border": "#1f2933", "text": "#e6edf3", "muted": "#3d4752",
         "key": "#ffa657", "value": "#a5d6ff", "accent": "#7ee787", "user": "#7ee787",
-        "ramp": ["#1f6f3f", "#2ea043", "#56d364", "#7ee787", "#d29922", "#ffa657", "#ff7b72"],
+        "flame": "#ff7b72", "gold": "#e3b341", "stars": "#7d8590",
         "palette": ["#484f58", "#ff7b72", "#7ee787", "#d29922", "#79c0ff", "#d2a8ff", "#56d4dd", "#e6edf3"],
     },
     "light": {
         "bg": "#fbfaf7", "border": "#d8dee4", "text": "#1f2328", "muted": "#c5ccd3",
         "key": "#bc4c00", "value": "#0550ae", "accent": "#1a7f37", "user": "#1a7f37",
-        "ramp": ["#6fbf86", "#4ac26b", "#2da44e", "#1a7f37", "#bf8700", "#bc4c00", "#cf222e"],
+        "flame": "#cf222e", "gold": "#9a6700", "stars": "#8c959f",
         "palette": ["#24292f", "#cf222e", "#1a7f37", "#9a6700", "#0969da", "#8250df", "#1b7c83", "#6e7781"],
     },
 }
@@ -126,39 +125,51 @@ def uptime(today):
     return ", ".join((plural(years, "year"), plural(months, "month"), plural(days, "day")))
 
 
-def heightmap(rows):
-    """ASCII topo map of Tangkuban Perahu, same shape as the banner.
+# Monas, bottom up from the flame. (row text, colour) — rows are centred on the card.
+MONAS = [
+    (",", "flame"),
+    ("( )", "flame"),
+    ("( ) )", "flame"),
+    ("\\ /", "flame"),
+    ("_/_\\_", "gold"),
+    ("[=====]", "gold"),
+    ("|   |", "text"),
+    ("|   |", "text"),
+    ("|   |", "text"),
+    ("|     |", "text"),
+    ("|     |", "text"),
+    ("|     |", "text"),
+    ("|       |", "text"),
+    ("|       |", "text"),
+    ("|       |", "text"),
+    ("|         |", "text"),
+    ("___________|_________|___________", "text"),
+    ("\\                               /", "text"),
+    ("\\_____________________________/", "text"),
+    ("|               |", "text"),
+    ("|               |", "text"),
+    ("________|_______________|________", "text"),
+    ("~" * 37, "accent"),
+    ("j a k a r t a", "accent"),
+]
 
-    Returns rows of (char, band) where band indexes the colour ramp, or None for blank.
-    """
-    rng = random.Random(1945)
-    phases = [(k, 0.09 / k ** 0.7, rng.uniform(0, 2 * math.pi)) for k in (2, 3, 5, 7)]
-    glyphs = ".:-=+*#"
-    bands = 8
-    out = []
-    for r in range(rows):
-        line = []
-        for col in range(ART_COLS):
-            # Terminal cells are ~2:1, so stretch x to keep the mountain's proportions.
-            x = (col - ART_COLS / 2 + 0.5) / (ART_COLS / 2)
-            y = (r - rows / 2 + 0.5) / (rows / 2) * 1.05
-            a = math.atan2(y * 0.45, x)
-            wobble = 1 + sum(amp * math.sin(k * a + ph) for k, amp, ph in phases)
-            d = math.hypot(x / 0.97, y / 0.8) / wobble
-            h = 1 - d
-            if h <= 0:
-                line.append(None)
-                continue
-            if d < 0.09:
-                line.append(("o" if d < 0.05 else "~", len(glyphs) - 1))
-                continue
-            level = h * bands
-            if level - int(level) > 0.38:
-                line.append(None)
-                continue
-            band = min(len(glyphs) - 1, int(h * len(glyphs)))
-            line.append((glyphs[band], band))
-        out.append(line)
+
+def skyline(rows):
+    """ASCII Monas under a starry sky. Returns rows of (char, colour key) or None for blank."""
+    rng = random.Random(1527)
+    centre = ART_COLS // 2 - 1
+    sky = rows - len(MONAS)
+    out = [[None] * ART_COLS for _ in range(rows)]
+    for r, (text, colour) in enumerate(MONAS, start=sky):
+        start = centre - len(text) // 2
+        for i, ch in enumerate(text):
+            if ch != " ":
+                out[r][start + i] = (ch, colour)
+    # Stars, kept clear of the monument.
+    for _ in range(26):
+        r, col = rng.randrange(0, sky + 16), rng.randrange(ART_COLS)
+        if abs(col - centre) > 6 and out[r][col] is None:
+            out[r][col] = (rng.choice(".....+*"), "stars")
     return out
 
 
@@ -190,7 +201,7 @@ def render(theme, stats, today):
     c = THEMES[theme]
     info = info_lines(stats, today)
     rows = len(info) + 2  # + blank + palette row
-    art = heightmap(rows)
+    art = skyline(rows)
     width = round(PAD * 2 + (ART_COLS + 3 + INFO_COLS) * CHAR)
     height = PAD * 2 + rows * LINE
     info_x = PAD + (ART_COLS + 3) * CHAR
@@ -206,16 +217,16 @@ def render(theme, stats, today):
 
     for r, line in enumerate(art):
         y = PAD + (r + 1) * LINE - 6
-        spans, run, run_band = [], "", None
+        spans, run, run_colour = [], "", None
         for cell in line + [None]:
-            ch, band = cell if cell else (" ", None)
-            if band != run_band and run:
-                spans.append((run, run_band))
+            ch, colour = cell if cell else (" ", None)
+            if colour != run_colour and run:
+                spans.append((run, run_colour))
                 run = ""
-            run, run_band = run + ch, band
+            run, run_colour = run + ch, colour
         tspans = "".join(
-            escape(text) if band is None else f'<tspan fill="{c["ramp"][band]}">{escape(text)}</tspan>'
-            for text, band in spans
+            escape(text) if colour is None else f'<tspan fill="{c[colour]}">{escape(text)}</tspan>'
+            for text, colour in spans
         )
         out.append(
             f'<text class="l" x="{PAD}" y="{y}" xml:space="preserve" style="animation-delay:{r * 0.03:.2f}s">{tspans}</text>'
