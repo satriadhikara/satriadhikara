@@ -42,12 +42,12 @@ INFO = [
     ("LinkedIn", "in/satriadhikara"),
     None,
     "GitHub Stats",
-    ("Repos", "{repos}", "Stars", "{stars}"),
-    ("Commits (1y)", "{commits}", "Followers", "{followers}"),
+    ("Public Repos", "{repos}"),
+    ("Commits (1y)", "{commits}"),
     ("Contributions (1y)", "{contributions}"),
 ]
 
-FALLBACK_STATS = {"repos": 48, "stars": 4, "followers": 41, "commits": "—", "contributions": "—"}
+FALLBACK_STATS = {"repos": 48, "commits": "—", "contributions": "—"}
 
 THEMES = {
     "dark": {
@@ -73,14 +73,9 @@ PAD = 28
 
 def fetch_stats(token):
     query = """
-    query($login: String!, $after: String) {
+    query($login: String!) {
       user(login: $login) {
-        followers { totalCount }
-        repositories(ownerAffiliations: OWNER, privacy: PUBLIC, first: 100, after: $after) {
-          totalCount
-          pageInfo { hasNextPage endCursor }
-          nodes { stargazerCount }
-        }
+        repositories(ownerAffiliations: OWNER, privacy: PUBLIC) { totalCount }
         contributionsCollection {
           totalCommitContributions
           restrictedContributionsCount
@@ -88,28 +83,19 @@ def fetch_stats(token):
         }
       }
     }"""
-    stars, after = 0, None
-    while True:
-        req = urllib.request.Request(
-            "https://api.github.com/graphql",
-            data=json.dumps({"query": query, "variables": {"login": LOGIN, "after": after}}).encode(),
-            headers={"Authorization": f"bearer {token}", "User-Agent": LOGIN},
-        )
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            body = json.load(resp)
-        if "errors" in body:
-            raise RuntimeError(body["errors"])
-        user = body["data"]["user"]
-        repos = user["repositories"]
-        stars += sum(n["stargazerCount"] for n in repos["nodes"])
-        if not repos["pageInfo"]["hasNextPage"]:
-            break
-        after = repos["pageInfo"]["endCursor"]
+    req = urllib.request.Request(
+        "https://api.github.com/graphql",
+        data=json.dumps({"query": query, "variables": {"login": LOGIN}}).encode(),
+        headers={"Authorization": f"bearer {token}", "User-Agent": LOGIN},
+    )
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        body = json.load(resp)
+    if "errors" in body:
+        raise RuntimeError(body["errors"])
+    user = body["data"]["user"]
     cc = user["contributionsCollection"]
     return {
-        "repos": repos["totalCount"],
-        "stars": stars,
-        "followers": user["followers"]["totalCount"],
+        "repos": user["repositories"]["totalCount"],
         "commits": cc["totalCommitContributions"] + cc["restrictedContributionsCount"],
         "contributions": cc["contributionCalendar"]["totalContributions"],
     }
@@ -182,19 +168,10 @@ def info_lines(stats, today):
             lines.append([])
         elif isinstance(item, str):
             lines.append([("accent", "- "), ("text", item), ("muted", " " + "─" * (INFO_COLS - len(item) - 3))])
-        elif len(item) == 2:
+        else:
             key, value = item[0], item[1].format(**fields)
             dots = INFO_COLS - len(key) - len(value) - 4
             lines.append([("accent", ". "), ("key", key), ("muted", ":" + " " + "." * dots + " "), ("value", value)])
-        else:
-            k1, v1, k2, v2 = item[0], item[1].format(**fields), item[2], item[3].format(**fields)
-            half = INFO_COLS // 2 + 6
-            dots1 = half - len(k1) - len(v1) - 4
-            dots2 = INFO_COLS - half - len(k2) - len(v2) - 6
-            lines.append([
-                ("accent", ". "), ("key", k1), ("muted", ": " + "." * dots1 + " "), ("value", v1),
-                ("muted", " | "), ("key", k2), ("muted", ": " + "." * dots2 + " "), ("value", v2),
-            ])
     return lines
 
 
