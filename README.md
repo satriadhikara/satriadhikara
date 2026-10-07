@@ -12,16 +12,17 @@
   <img alt="neofetch-style card with role, stack and live GitHub stats" src="https://raw.githubusercontent.com/satriadhikara/satriadhikara/output/neofetch-dark.svg" width="100%">
 </picture>
 
-### `$ git log --oneline ~/work`
+### `$ git log --author=me dbrepo`
 
-| when | where | what shipped |
+<a href="https://github.com/DBRepo-Project/dbrepo"><b>DBRepo</b></a>: an open-source repository for research data stored in databases. <sub><code>java</code> <code>nginx</code> <code>helm</code> <code>docker</code></sub>
+
+| pr | status | change |
 |:--|:--|:--|
-| `2026` | **Grab**<br><sub>Geo / Mapping Platform</sub> | An LLM operations agent in Slack whose destructive tools only run on approvals bound to the exact call, with a single-winner lock across pods. Closed path-traversal, IDOR and SQL-injection holes in Go services. Moved KartaView Web v2 behind the auth gateway, deleting 10 proxy routes. |
-| `2026` | **Thesis**<br><sub>ITB × DBRepo</sub> | Bit-reproducible `SUM` / `AVG` for a research data repository: a MariaDB aggregate function in C that returns identical bits across 1,000 shuffled input orders. |
-| `2026` | **Oktan**<br><sub>national chemistry competition</sub> | Reworked a delayed exam platform in under two weeks: atomic upserts, BullMQ deadline jobs, Redis caching, PgBouncer. 3,000+ participants sat the live exam with no downtime. |
-| `2025` | **Inkubator IT**<br><sub>Vice CTO, DevOps</sub> | Technical oversight for 35+ engineers across 8+ paid client projects. Shared templates, CI/CD and deployment conventions every team built on. |
-| `2025` | **Komdigi**<br><sub>Ministry of Communication & Digital Affairs</sub> | Backend for a helpdesk proof of concept: a ten-unit service hierarchy, ticket routing and SLA deadlines that count only working hours. |
-| `2024` | **Edunex**<br><sub>ITB's LMS, 28k+ daily users</sub> | Replaced PHP file proxying with signed direct-to-Azure uploads. Lecture slides went from 3–5 s to under a second, rolled out with zero downtime. |
+| [`#117`](https://github.com/DBRepo-Project/dbrepo/pull/117) | open | Stream table, view and subset exports straight from JDBC instead of staging them in S3, so exports are no longer capped by bucket space or heap. The gateway now streams over HTTP/1.1, so a failed export errors instead of arriving silently truncated. |
+| [`#114`](https://github.com/DBRepo-Project/dbrepo/pull/114) | open | Dashboard moved to the official Grafana chart with pinned plugins, plus a CI check that keeps them pinned. |
+| [`#113`](https://github.com/DBRepo-Project/dbrepo/pull/113) | merged | Java tests run against SeaweedFS after MinIO images disappeared from Docker Hub and broke CI. |
+| [`#112`](https://github.com/DBRepo-Project/dbrepo/pull/112) | open | One-line installer fixed: the Compose distribution is now built, published to GitHub releases and installed from there. |
+| [`#105`](https://github.com/DBRepo-Project/dbrepo/pull/105) | merged | Generated S3 and metrics credentials aligned in Docker Compose. |
 
 ### `$ ls ~/projects`
 

@@ -34,7 +34,7 @@ INFO = [
     ("Stack.Infra", "Kubernetes, Helm, Docker, Azure, OTel"),
     ("Stack.AI", "LangGraph, LLM tool calling, RAG"),
     ("Stack.Web", "Next.js, React, TanStack, Expo"),
-    ("Building", "kolumba, a JMAP-native webmail"),
+    ("Open Source", "DBRepo, kolumba"),
     None,
     "Contact",
     ("Web", "satriadhikara.com"),
