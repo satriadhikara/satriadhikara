@@ -12,21 +12,15 @@
   <img alt="neofetch-style card with role, stack and live GitHub stats" src="https://raw.githubusercontent.com/satriadhikara/satriadhikara/output/neofetch-dark.svg" width="100%">
 </picture>
 
-### `$ git log --author=me dbrepo`
-
-<a href="https://github.com/DBRepo-Project/dbrepo"><b>DBRepo</b></a>: an open-source repository for research data stored in databases. <sub><code>java</code> <code>nginx</code> <code>helm</code> <code>docker</code></sub>
-
-| pr | status | change |
-|:--|:--|:--|
-| [`#117`](https://github.com/DBRepo-Project/dbrepo/pull/117) | open | Stream table, view and subset exports straight from JDBC instead of staging them in S3, so exports are no longer capped by bucket space or heap. The gateway now streams over HTTP/1.1, so a failed export errors instead of arriving silently truncated. |
-| [`#114`](https://github.com/DBRepo-Project/dbrepo/pull/114) | open | Dashboard moved to the official Grafana chart with pinned plugins, plus a CI check that keeps them pinned. |
-| [`#113`](https://github.com/DBRepo-Project/dbrepo/pull/113) | merged | Java tests run against SeaweedFS after MinIO images disappeared from Docker Hub and broke CI. |
-| [`#112`](https://github.com/DBRepo-Project/dbrepo/pull/112) | open | One-line installer fixed: the Compose distribution is now built, published to GitHub releases and installed from there. |
-| [`#105`](https://github.com/DBRepo-Project/dbrepo/pull/105) | merged | Generated S3 and metrics credentials aligned in Docker Compose. |
-
 ### `$ ls ~/projects`
 
 <table>
+  <tr>
+    <td colspan="2" valign="top">
+      <a href="https://github.com/DBRepo-Project/dbrepo"><b>DBRepo</b></a> <sub>contributor</sub> <sub><code>java</code> <code>nginx</code> <code>helm</code> <code>docker</code></sub>
+      <br><sub>Open-source repository for research data stored in databases. It keeps every query, timestamp and result checksum, so <b>any data subset can be cited and reproduced</b> exactly as it was.</sub>
+    </td>
+  </tr>
   <tr>
     <td width="50%" valign="top">
       <a href="https://github.com/satriadhikara/kolumba"><b>kolumba</b></a> <sub><code>typescript</code> <code>tanstack start</code></sub>
