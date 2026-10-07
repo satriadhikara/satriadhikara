@@ -15,8 +15,8 @@ W, H = 1200, 360
 FONT = "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace"
 
 NAME = "satriadhikara"
-TAGLINE = "software engineer · grab / kartaview"
-SUBLINE = "distributed systems ✦ dev tooling ✦ maps ✦ shipping things"
+TAGLINE = "swe @ grab · geo / mapping platform"
+SUBLINE = "backend ✦ infra ✦ applied ai ✦ geospatial"
 COORDS = "06°10′31″S  106°49′38″E  ·  monas, jakarta"
 TAG_SIZE = 19
 TYPE_SHIFT = round(len(TAGLINE) * TAG_SIZE * 0.6)

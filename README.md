@@ -1,7 +1,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg">
-  <img alt="satriadhikara: software engineer at Grab / KartaView" src="./assets/hero-dark.svg" width="100%">
+  <img alt="satriadhikara: software engineer at Grab, Geo / Mapping Platform" src="./assets/hero-dark.svg" width="100%">
 </picture>
 
 <br>
@@ -12,32 +12,43 @@
   <img alt="neofetch-style card with role, stack and live GitHub stats" src="https://raw.githubusercontent.com/satriadhikara/satriadhikara/output/neofetch-dark.svg" width="100%">
 </picture>
 
-### `$ ls ~/work --sort=interesting`
+### `$ git log --oneline ~/work`
+
+| when | where | what shipped |
+|:--|:--|:--|
+| `2026` | **Grab**<br><sub>Geo / Mapping Platform</sub> | An LLM operations agent in Slack whose destructive tools only run on approvals bound to the exact call, with a single-winner lock across pods. Closed path-traversal, IDOR and SQL-injection holes in Go services. Moved KartaView Web v2 behind the auth gateway, deleting 10 proxy routes. |
+| `2026` | **Thesis**<br><sub>ITB × DBRepo</sub> | Bit-reproducible `SUM` / `AVG` for a research data repository: a MariaDB aggregate function in C that returns identical bits across 1,000 shuffled input orders. |
+| `2026` | **Oktan**<br><sub>national chemistry competition</sub> | Reworked a delayed exam platform in under two weeks: atomic upserts, BullMQ deadline jobs, Redis caching, PgBouncer. 3,000+ participants sat the live exam with no downtime. |
+| `2025` | **Inkubator IT**<br><sub>Vice CTO, DevOps</sub> | Technical oversight for 35+ engineers across 8+ paid client projects. Shared templates, CI/CD and deployment conventions every team built on. |
+| `2025` | **Komdigi**<br><sub>Ministry of Communication & Digital Affairs</sub> | Backend for a helpdesk proof of concept: a ten-unit service hierarchy, ticket routing and SLA deadlines that count only working hours. |
+| `2024` | **Edunex**<br><sub>ITB's LMS, 28k+ daily users</sub> | Replaced PHP file proxying with signed direct-to-Azure uploads. Lecture slides went from 3–5 s to under a second, rolled out with zero downtime. |
+
+### `$ ls ~/projects`
 
 <table>
   <tr>
     <td width="50%" valign="top">
-      <a href="https://github.com/satriadhikara/kolumba"><b>kolumba</b></a> <sub><code>typescript</code></sub>
-      <br><sub>Webmail client built for Stalwart Mail Server. Speaks <b>JMAP</b> natively: no IMAP translation layer, no provider-specific APIs. Point it at your instance and go.</sub>
+      <a href="https://github.com/satriadhikara/kolumba"><b>kolumba</b></a> <sub><code>typescript</code> <code>tanstack start</code></sub>
+      <br><sub>Open-source webmail client for Stalwart Mail Server that speaks <b>JMAP</b> natively, with no IMAP translation layer. Batched method calls with result references create and submit an email in one request.</sub>
     </td>
     <td width="50%" valign="top">
-      <a href="https://github.com/satriadhikara/reducto"><b>reducto</b></a> <sub><code>rust</code></sub>
-      <br><sub>Language-agnostic <b>distributed build cache</b> with an S3/MinIO backend and CI integrations. Stop rebuilding what someone already built.</sub>
+      <a href="https://github.com/satriadhikara/jejak"><b>jejak</b></a> <sub>🏅 Gemastik 2025 finalist</sub>
+      <br><sub>Pedestrian route and sidewalk-damage reporting app. Samples <b>Street View along your route</b> and has Gemini score the sidewalks, crossings and lighting. <code>expo</code> <code>hono</code></sub>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="https://github.com/satriadhikara/jejak"><b>jejak</b></a> <sub><code>react native</code> <code>hono</code></sub>
-      <br><sub>Pedestrian safety platform: <b>real-time GPS tracking</b>, AI route analysis and community-reported hazards.</sub>
+      <a href="https://github.com/satriadhikara/dock"><b>dock</b></a> <sub>🥈 IFest 2025 Hackathon</sub>
+      <br><sub>Contract lifecycle system for port logistics: a rich-text contract editor, draft-to-signing status flow and an AI contract assistant. <code>next.js</code> <code>hono</code> <code>fastapi</code></sub>
     </td>
     <td width="50%" valign="top">
-      <a href="https://github.com/satriadhikara/mp4gif"><b>mp4gif</b></a> <sub><code>bun</code> <code>ffmpeg</code></sub>
-      <br><sub>MP4 → GIF in <b>one command</b>. A tiny CLI that does exactly one thing.</sub>
+      <a href="https://github.com/satriadhikara/babyblooms"><b>babyblooms</b></a> <sub>🏅 5th, Hack4Health IEEE ITB 2024</sub>
+      <br><sub>Pregnancy companion that <b>links a mother's and partner's accounts</b> with a shared journal, community and trimester tracking. <code>expo</code> <code>hono</code></sub>
     </td>
   </tr>
 </table>
 
-### `$ git log --graph --all`
+### `$ ./pacman --eat contributions`
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/satriadhikara/satriadhikara/output/pacman-contribution-graph-dark.svg">
