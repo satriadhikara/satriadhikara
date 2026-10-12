@@ -9,8 +9,8 @@ which keeps local previews working.
 """
 
 import json
+import math
 import os
-import random
 import sys
 import urllib.request
 from datetime import date, datetime, timezone
@@ -23,23 +23,17 @@ JOINED = date(2021, 5, 12)
 # Edit me. (key, value) pairs; None renders a blank line, a str renders a section header.
 INFO = [
     ("Role", "Software Engineer Intern, Fullstack"),
-    ("Work", "Grab · Geo / Mapping Platform"),
+    ("Work", "Grab"),
     ("Uni", "Informatics Eng. @ ITB, 2022–2026"),
     ("Host", "Jakarta, Indonesia"),
     ("Uptime", "{uptime}"),
     None,
     ("Languages.Code", "Go, TypeScript, Python, SQL, C"),
     ("Stack.Backend", "gRPC, Kratos, Hono, FastAPI"),
-    ("Stack.Data", "PostgreSQL/PostGIS, Redis, RabbitMQ"),
+    ("Stack.Data", "PostgreSQL, Redis, RabbitMQ"),
     ("Stack.Infra", "Kubernetes, Helm, Docker, Azure, OTel"),
     ("Stack.AI", "LangGraph, LLM tool calling, RAG"),
     ("Stack.Web", "Next.js, React, TanStack, Expo"),
-    ("Open Source", "DBRepo, kolumba"),
-    None,
-    "Contact",
-    ("Web", "satriadhikara.com"),
-    ("Email", "hello@satriadhikara.com"),
-    ("LinkedIn", "in/satriadhikara"),
     None,
     "GitHub Stats",
     ("Public Repos", "{repos}"),
@@ -53,13 +47,13 @@ THEMES = {
     "dark": {
         "bg": "#0b0f14", "border": "#1f2933", "text": "#e6edf3", "muted": "#3d4752",
         "key": "#ffa657", "value": "#a5d6ff", "accent": "#7ee787", "user": "#7ee787",
-        "flame": "#ff7b72", "gold": "#e3b341", "stars": "#7d8590",
+        "dim": "#3fb950",
         "palette": ["#484f58", "#ff7b72", "#7ee787", "#d29922", "#79c0ff", "#d2a8ff", "#56d4dd", "#e6edf3"],
     },
     "light": {
         "bg": "#fbfaf7", "border": "#d8dee4", "text": "#1f2328", "muted": "#c5ccd3",
         "key": "#bc4c00", "value": "#0550ae", "accent": "#1a7f37", "user": "#1a7f37",
-        "flame": "#cf222e", "gold": "#9a6700", "stars": "#8c959f",
+        "dim": "#4ac26b",
         "palette": ["#24292f", "#cf222e", "#1a7f37", "#9a6700", "#0969da", "#8250df", "#1b7c83", "#6e7781"],
     },
 }
@@ -112,51 +106,38 @@ def uptime(today):
     return ", ".join((plural(years, "year"), plural(months, "month"), plural(days, "day")))
 
 
-# Monas, bottom up from the flame. (row text, colour) — rows are centred on the card.
-MONAS = [
-    (",", "flame"),
-    ("( )", "flame"),
-    ("( ) )", "flame"),
-    ("\\ /", "flame"),
-    ("_/_\\_", "gold"),
-    ("[=====]", "gold"),
-    ("|   |", "text"),
-    ("|   |", "text"),
-    ("|   |", "text"),
-    ("|     |", "text"),
-    ("|     |", "text"),
-    ("|     |", "text"),
-    ("|       |", "text"),
-    ("|       |", "text"),
-    ("|       |", "text"),
-    ("|         |", "text"),
-    ("___________|_________|___________", "text"),
-    ("\\                               /", "text"),
-    ("\\_____________________________/", "text"),
-    ("|               |", "text"),
-    ("|               |", "text"),
-    ("________|_______________|________", "text"),
-    ("~" * 37, "accent"),
-    ("j a k a r t a", "accent"),
-]
+# Spinning ASCII torus, after Andy Sloane's donut.c. Frames loop seamlessly:
+# A makes one full turn and B two over FRAMES frames.
+FRAMES, FRAME_S = 60, 0.09
+STILL = 10  # frame shown when motion is reduced
+SHADES = ".,-~:;=!*#$@"
+DONUT_ROWS = 17
 
 
-def skyline(rows):
-    """ASCII Monas under a starry sky. Returns rows of (char, colour key) or None for blank."""
-    rng = random.Random(1527)
-    centre = ART_COLS // 2 - 1
-    sky = rows - len(MONAS)
-    out = [[None] * ART_COLS for _ in range(rows)]
-    for r, (text, colour) in enumerate(MONAS, start=sky):
-        start = centre - len(text) // 2
-        for i, ch in enumerate(text):
-            if ch != " ":
-                out[r][start + i] = (ch, colour)
-    # Stars, kept clear of the monument.
-    for _ in range(26):
-        r, col = rng.randrange(0, sky + 16), rng.randrange(ART_COLS)
-        if abs(col - centre) > 6 and out[r][col] is None:
-            out[r][col] = (rng.choice(".....+*"), "stars")
+def donut(frame):
+    """One frame as DONUT_ROWS rows of ART_COLS shade indices (-1 = empty)."""
+    a = 2 * math.pi * frame / FRAMES
+    b = 2 * a
+    ca, sa, cb, sb = math.cos(a), math.sin(a), math.cos(b), math.sin(b)
+    k2 = 5
+    k1x = ART_COLS * k2 / 9
+    k1y = k1x * CHAR / LINE  # cells are taller than wide
+    zbuf = [[0.0] * ART_COLS for _ in range(DONUT_ROWS)]
+    out = [[-1] * ART_COLS for _ in range(DONUT_ROWS)]
+    for ti in range(0, 628, 7):
+        ct, st = math.cos(ti / 100), math.sin(ti / 100)
+        for pi in range(0, 628, 2):
+            cp, sp = math.cos(pi / 100), math.sin(pi / 100)
+            circle = 2 + ct
+            x = circle * (cb * cp + sa * sb * sp) - st * ca * sb
+            y = circle * (sb * cp - sa * cb * sp) + st * ca * cb
+            ooz = 1 / (k2 + ca * circle * sp + st * sa)
+            col = int(ART_COLS / 2 + k1x * ooz * x)
+            row = int(DONUT_ROWS / 2 - k1y * ooz * y)
+            lum = cp * ct * sb - ca * ct * sp - sa * st + cb * (ca * st - ct * sa * sp)
+            if 0 <= col < ART_COLS and 0 <= row < DONUT_ROWS and lum > 0 and ooz > zbuf[row][col]:
+                zbuf[row][col] = ooz
+                out[row][col] = min(int(lum * 8), len(SHADES) - 1)
     return out
 
 
@@ -179,7 +160,6 @@ def render(theme, stats, today):
     c = THEMES[theme]
     info = info_lines(stats, today)
     rows = len(info) + 2  # + blank + palette row
-    art = skyline(rows)
     width = round(PAD * 2 + (ART_COLS + 3 + INFO_COLS) * CHAR)
     height = PAD * 2 + rows * LINE
     info_x = PAD + (ART_COLS + 3) * CHAR
@@ -189,26 +169,37 @@ def render(theme, stats, today):
         f'role="img" aria-label="{LOGIN} neofetch">',
         f"<style>text{{font-family:{FONT};font-size:{SIZE}px;white-space:pre}}"
         ".l{opacity:0;animation:in .35s ease-out forwards}@keyframes in{to{opacity:1}}"
-        "@media (prefers-reduced-motion:reduce){.l{animation:none;opacity:1}}</style>",
+        f".f{{opacity:0;animation:fr {FRAMES * FRAME_S:.2f}s steps(1) infinite}}"
+        f"@keyframes fr{{0%{{opacity:1}}{100 / FRAMES:.3f}%{{opacity:0}}}}"
+        "@media (prefers-reduced-motion:reduce){.l,.f{animation:none;opacity:1}.f:not(.still){display:none}}</style>",
         f'<rect x=".5" y=".5" width="{width - 1}" height="{height - 1}" rx="12" fill="{c["bg"]}" stroke="{c["border"]}"/>',
     ]
 
-    for r, line in enumerate(art):
-        y = PAD + (r + 1) * LINE - 6
-        spans, run, run_colour = [], "", None
-        for cell in line + [None]:
-            ch, colour = cell if cell else (" ", None)
-            if colour != run_colour and run:
-                spans.append((run, run_colour))
-                run = ""
-            run, run_colour = run + ch, colour
-        tspans = "".join(
-            escape(text) if colour is None else f'<tspan fill="{c[colour]}">{escape(text)}</tspan>'
-            for text, colour in spans
-        )
-        out.append(
-            f'<text class="l" x="{PAD}" y="{y}" xml:space="preserve" style="animation-delay:{r * 0.03:.2f}s">{tspans}</text>'
-        )
+    # Donut frames, centred in the art column; each is visible for one FRAME_S slot.
+    top = (rows - DONUT_ROWS) // 2
+    for f in range(FRAMES):
+        lines = []
+        for r, cells in enumerate(donut(f)):
+            spans, run, run_colour = [], "", None
+            for idx in cells + [-1]:
+                colour = None if idx < 0 else ("accent" if idx >= 6 else "dim")
+                if colour != run_colour and run:
+                    spans.append((run, run_colour))
+                    run = ""
+                run, run_colour = run + (" " if idx < 0 else SHADES[idx]), colour
+            body = "".join(
+                escape(t) if col is None else f'<tspan fill="{c[col]}">{escape(t)}</tspan>' for t, col in spans
+            ).rstrip()
+            if body:
+                y = PAD + (top + r + 1) * LINE - 6
+                lines.append(f'<text x="{PAD}" y="{y}" xml:space="preserve">{body}</text>')
+        still = " still" if f == STILL else ""
+        out.append(f'<g class="f{still}" style="animation-delay:{f * FRAME_S:.2f}s">{"".join(lines)}</g>')
+    y = PAD + (top + DONUT_ROWS) * LINE - 6
+    out.append(
+        f'<text class="l" x="{PAD + ART_COLS * CHAR / 2:.1f}" y="{y}" text-anchor="middle" fill="{c["muted"]}" '
+        f'style="animation-delay:.3s">$ ./donut</text>'
+    )
 
     for r, parts in enumerate(info):
         y = PAD + (r + 1) * LINE - 6

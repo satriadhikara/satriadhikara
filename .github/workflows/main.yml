@@ -1,7 +1,7 @@
 name: profile assets
 
 on:
-  schedule: # Refresh stats and the pacman graph every day
+  schedule: # Refresh stats every day
     - cron: "0 0 * * *"
   workflow_dispatch: # Allows manual triggering
   push: # Runs on every push to the main branch
@@ -17,11 +17,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: generate pacman-contribution-graph.svg
-        uses: abozanona/pacman-contribution-graph@main
-        with:
-          github_user_name: ${{ github.repository_owner }}
 
       - name: generate neofetch card
         run: python3 scripts/neofetch.py dist
