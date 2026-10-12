@@ -24,7 +24,7 @@ JOINED = date(2021, 5, 12)
 INFO = [
     ("Role", "Software Engineer Intern, Fullstack"),
     ("Work", "Grab"),
-    ("Uni", "Informatics Eng. @ ITB, 2022–2026"),
+    ("Uni", "Informatics Eng. @ ITB, class of 2026"),
     ("Host", "Jakarta, Indonesia"),
     ("Uptime", "{uptime}"),
     None,
